@@ -18,5 +18,10 @@ export default [
     path: '/info-list',
     name: 'info-list',
     component: () => import('@/views/infoList/index.vue')
+  },
+  {
+    path: '/demo',
+    name: 'demo',
+    component: () => import('@/views/demo/index.vue')
   }
 ]

@@ -26,6 +26,9 @@
         >
           报名参加
         </van-button>
+        <van-button type="primary" size="large" @click="goToDemo">
+          DEMO
+        </van-button>
       </div>
     </div>
   </div>
@@ -46,6 +49,9 @@ export default class Entry extends Vue {
   }
   private goToMask() {
     this.$router.push({ name: 'mask' })
+  }
+  private goToDemo() {
+    this.$router.push({ name: 'demo' })
   }
 }
 </script>
