@@ -5,9 +5,64 @@
         title="江湖英雄帖"
         left-text="返回"
         left-arrow
-        @click-left="onClickLeft"
+        @click-left="goBack"
       />
     </div>
+    <div class="layout__body">
+      <van-cell-group>
+        <van-field
+          v-model="formData.name"
+          clearable
+          label="尊姓大名"
+          placeholder="请输入大名"
+        />
+        <van-field
+          v-model="formData.skill"
+          clearable
+          label="会啥绝招"
+          placeholder="请输入绝招"
+        />
+        <van-cell
+          title="何方门派"
+          is-link
+          :value="textData.sectStr"
+          @click="goToSelect('sect')"
+        />
+        <van-cell
+          title="几时入坑"
+          is-link
+          :value="textData.pitDateStr"
+          @click="goToSelect('pitDate')"
+        />
+      </van-cell-group>
+    </div>
+    <van-popup
+      v-model="showDatePicker"
+      @click-overlay="goBack"
+      position="bottom"
+    >
+      <van-datetime-picker
+        v-model="formData.pitDate"
+        type="date"
+        title="入坑时间"
+        :max-date="new Date()"
+        :formatter="formatterDate"
+        @cancel="goBack"
+        @confirm="onSelectPitDate"
+      />
+    </van-popup>
+    <van-popup
+      v-model="showSectsPicker"
+      @click-overlay="goBack"
+      position="bottom"
+    >
+      <van-picker
+        show-toolbar
+        :columns="sects"
+        @cancle="goBack"
+        @confirm="onSelectSect"
+      />
+    </van-popup>
     <div class="bottom-button--submit" id="fixed-bottom">
       <van-button type="primary" size="large" @click="goToApply">
         提交
@@ -17,19 +72,98 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { NavBar, Button } from 'vant'
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import {
+  NavBar,
+  Button,
+  Cell,
+  Field,
+  CellGroup,
+  Popup,
+  Picker,
+  DatetimePicker
+} from 'vant'
+import moment from 'moment'
 
-Vue.use(NavBar).use(Button)
+Vue.use(NavBar)
+  .use(Button)
+  .use(Cell)
+  .use(Field)
+  .use(CellGroup)
+  .use(Popup)
+  .use(Picker)
+  .use(DatetimePicker)
 
 @Component
 export default class Form extends Vue {
-  private onClickLeft() {
+  private showSectsPicker = false
+
+  private showDatePicker = false
+
+  private sects = ['武当派', '少林派', '峨嵋派', '华山派', '丐帮']
+
+  private formData = {
+    name: '',
+    skill: '',
+    sect: '',
+    pitDate: new Date()
+  }
+
+  private textData = {
+    sectStr: '',
+    pitDateStr: ''
+  }
+
+  private formatterDate(type: string, value: string) {
+    switch (type) {
+      case 'year':
+        return `${value}年`
+      case 'month':
+        return `${value}月`
+      case 'day':
+        return `${value}日`
+      default:
+        return value
+    }
+  }
+
+  private onSelectPitDate(pitDate: Date) {
+    this.textData.pitDateStr = moment(pitDate).format('YYYY年MM月DD日')
+    this.goBack()
+  }
+
+  private onSelectSect(sect: string) {
+    this.formData.sect = sect
+    this.textData.sectStr = sect
+    this.goBack()
+  }
+
+  private goToSelect(popupName: string) {
+    this.$router.push({ name: 'form', query: { [popupName]: 'true' } })
+  }
+
+  private goBack() {
     this.$router.go(-1)
   }
 
   private goToApply() {
     this.$router.push({ name: 'info-list' })
+  }
+
+  @Watch('$route.query')
+  private handlePopup(val: AnyObject) {
+    switch (true) {
+      case val.sect && val.sect === 'true':
+        this.showSectsPicker = true
+        break
+      case val.pitDate && val.pitDate === 'true':
+        this.showDatePicker = true
+        break
+      default:
+        this.showSectsPicker = false
+        this.showDatePicker = false
+        break
+    }
   }
 }
 </script>
