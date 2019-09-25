@@ -13,8 +13,8 @@
         </div>
         <div class="entry__sub-section">
           <div class="entry__title--sub">大会时间</div>
-          <!-- <div class="entry__time">{{startTimeStr}} 开始</div> -->
-          <!-- <div class="entry__time">{{endTimeStr}} 结束</div> -->
+          <div class="entry__time">{{ startTimeStr }} 开始</div>
+          <div class="entry__time">{{ endTimeStr }} 结束</div>
         </div>
       </div>
       <div>
@@ -37,6 +37,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { NavBar, Button } from 'vant'
+import moment from 'moment'
 
 Vue.use(NavBar).use(Button)
 
@@ -45,8 +46,25 @@ export default class Entry extends Vue {
   private meetingInfo = {
     id: '0d93cfe7-07f2-4453-a528-fd085fd15460',
     title: '华山论键大会',
-    location: '光明顶'
+    location: '光明顶',
+    startTime: moment()
+      .add(10, 'day')
+      .valueOf(),
+    endTime: moment()
+      .add(10, 'day')
+      .add(2, 'hour')
+      .valueOf()
   }
+
+  private startTimeStr = moment()
+    .add(10, 'day')
+    .format('YYYY年MM月DD日 HH时MM分')
+
+  private endTimeStr = moment()
+    .add(10, 'day')
+    .add(2, 'day')
+    .format('YYYY年MM月DD日 HH时MM分')
+
   private goToMask() {
     this.$router.push({ name: 'mask' })
   }
