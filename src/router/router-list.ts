@@ -1,12 +1,22 @@
 export default [
   {
-    path: "/",
-    name: "home",
-    component: () => import("@/views/Home.vue")
+    path: '/',
+    name: 'entry',
+    component: () => import('@/views/entry/index.vue')
   },
   {
-    path: "/about",
-    name: "about",
-    component: () => import("@/views/About.vue")
+    path: '/mask',
+    name: 'mask',
+    component: () => import('@/views/mask/index.vue')
+  },
+  {
+    path: '/form',
+    name: 'form',
+    component: () => import('@/views/form/index.vue')
+  },
+  {
+    path: '/info-list',
+    name: 'info-list',
+    component: () => import('@/views/infoList/index.vue')
   }
-];
+]
