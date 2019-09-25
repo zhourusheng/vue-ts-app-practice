@@ -51,6 +51,7 @@ export default class Entry extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import '../../assets/styles/_mixins.scss';
 .layout__body {
   display: flex;
   flex-direction: column;
@@ -66,7 +67,7 @@ export default class Entry extends Vue {
   width: 80px;
   height: 80px;
   margin: 40px auto 40px auto;
-  // .bg-image('./img/logo');
+  @include bg-img('../../assets/images/logo');
   background-size: contain;
   background-repeat: no-repeat;
 }
