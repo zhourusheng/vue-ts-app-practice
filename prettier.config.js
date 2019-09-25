@@ -14,7 +14,7 @@ module.exports = {
   // 对象中的空格 默认true
   // true: { foo: bar }
   // false: {foo: bar}
-  bracketSpacing: true,
+  // bracketSpacing: false,
   // JSX标签闭合位置 默认false
   // false: <div
   //          className=''
@@ -26,5 +26,5 @@ module.exports = {
   // 箭头函数参数括号 默认avoid 可选 avoid| always
   // avoid 能省略括号的时候就省略 例如x => x
   // always 总是有括号
-  arrowParens: 'always'
+  arrowParens: 'avoid'
 }
