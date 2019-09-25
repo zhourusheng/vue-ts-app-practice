@@ -1,4 +1,6 @@
 {
   "RouterMode": "history",
-  "RouterBase": "/ts-vue/"
+  "RouterBase": "/ts-vue/",
+
+  "VuePageStackEnabled": true
 }
