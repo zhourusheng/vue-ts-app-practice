@@ -66,6 +66,8 @@ export default class Home extends Vue {
 </script>
 
 <style lang="scss">
+@import "./assets/styles/index.scss";
+
 #app {
   position: fixed;
   top: 0;
