@@ -1,16 +1,17 @@
 const plugins = [
+  ['lodash'],
   [
-    "import",
+    'import',
     {
-      libraryName: "vant",
-      libraryDirectory: "es",
+      libraryName: 'vant',
+      libraryDirectory: 'es',
       style: true
     },
-    "vant"
+    'vant'
   ]
-];
+]
 
 module.exports = {
   plugins,
-  presets: ["@vue/app"]
-};
+  presets: ['@vue/app']
+}

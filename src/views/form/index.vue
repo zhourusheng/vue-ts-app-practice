@@ -64,7 +64,7 @@
       />
     </van-popup>
     <div class="bottom-button--submit" id="fixed-bottom">
-      <van-button type="primary" size="large" @click="goToApply">
+      <van-button type="primary" size="large" @click="onSubmit">
         提交
       </van-button>
     </div>
@@ -81,9 +81,13 @@ import {
   CellGroup,
   Popup,
   Picker,
+  Toast,
   DatetimePicker
 } from 'vant'
 import moment from 'moment'
+
+import ValidateUtils from '@/assets/utils/validate'
+import { ValidateError } from '@/types'
 
 Vue.use(NavBar)
   .use(Button)
@@ -92,10 +96,13 @@ Vue.use(NavBar)
   .use(CellGroup)
   .use(Popup)
   .use(Picker)
+  .use(Toast)
   .use(DatetimePicker)
 
 @Component
 export default class Form extends Vue {
+  private validator!: ValidateUtils
+
   private showSectsPicker = false
 
   private showDatePicker = false
@@ -106,12 +113,25 @@ export default class Form extends Vue {
     name: '',
     skill: '',
     sect: '',
-    pitDate: new Date()
+    pitDate: ''
   }
 
   private textData = {
     sectStr: '',
     pitDateStr: ''
+  }
+
+  private rules = {
+    name: [
+      { required: true, message: '请输入大名' },
+      { max: 10, message: '大名不能超过10个字哦~' }
+    ],
+    skill: [
+      { required: true, message: '请输入绝招' },
+      { max: 10, message: '绝招不能超过10个字哦~' }
+    ],
+    sect: { required: true, message: '请选择门派' },
+    pitDate: { required: true, message: '请选择入坑时间' }
   }
 
   private formatterDate(type: string, value: string) {
@@ -128,7 +148,9 @@ export default class Form extends Vue {
   }
 
   private onSelectPitDate(pitDate: Date) {
-    this.textData.pitDateStr = moment(pitDate).format('YYYY年MM月DD日')
+    const time = moment(pitDate).format('YYYY年MM月DD日')
+    this.textData.pitDateStr = time
+    this.formData.pitDate = time
     this.goBack()
   }
 
@@ -146,8 +168,15 @@ export default class Form extends Vue {
     this.$router.go(-1)
   }
 
-  private goToApply() {
-    this.$router.push({ name: 'info-list' })
+  private onSubmit() {
+    this.validator
+      .validate()
+      .then(() => {
+        this.$router.push({ name: 'info-list' })
+      })
+      .catch((errors: ValidateError[]) => {
+        this.$toast(errors[0].message)
+      })
   }
 
   @Watch('$route.query')
@@ -164,6 +193,13 @@ export default class Form extends Vue {
         this.showDatePicker = false
         break
     }
+  }
+
+  private created() {
+    this.validator = new ValidateUtils({
+      rules: this.rules,
+      data: this.formData
+    })
   }
 }
 </script>
